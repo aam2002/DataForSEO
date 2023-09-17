@@ -1,0 +1,51 @@
+input {
+  border: 2px solid red;
+  background-color: blue;
+}
+.head {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: white; */
+}
+img {
+  height: 500px;
+}
+.test {
+  width: 150px;
+  height: 60px;
+  background-color: white;
+  margin: 0 10px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: large;
+  border-radius: 10px;
+}
+.data-value {
+  width: 90%;
+  height: 40px;
+  background-color: rgb(54, 255, 47);
+  position: relative;
+  top: -20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.additional-main-data {
+  display: flex;
+  justify-content: space-between;
+}
+.main-data {
+  margin-left: 20px;
+  display: flex;
+  height: 500px;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
