@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext} from "react";
 import "./Main.css";
 import OnPageScore from "./OnPageScore";
+import DataContext from "../context/DataContext";
 const Main = () => {
+  const { Data } = useContext(DataContext);
+  console.log("data:"+Data)
   const score = 97;
   return (
     <div className="flex flex-center">
       <div className="head">
-        <div>
-          <img
-            src="https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8fDA%3D&w=1000&q=80"
-            alt=""
-          />
-        </div>
         <div className="main-data">
           <OnPageScore score={score} />
           <div className="additional-main-data">

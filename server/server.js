@@ -11,21 +11,23 @@ dotenv.config();
 const app = express();
 
 //middelwares
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-//routes
+//variable
+let pending = true;
+
+// routes
 app.post("/data", (req, res) => {
   const { url } = req.body;
   const post_array = [];
   post_array.push({
     target: `${url}`,
-    max_crawl_pages: 10,
+    max_crawl_pages: 1,
     load_resources: true,
     enable_javascript: true,
     enable_browser_rendering: true,
     tag: "some-str",
-    pingback_url: "https://www.youtube.com/",
   });
   axios({
     method: "post",
@@ -41,7 +43,9 @@ app.post("/data", (req, res) => {
   })
     .then(function(response) {
       var result = response["data"]["tasks"];
+
       // Result data
+      takeid = result[0].id;
       res.status(200).send({
         result: result[0].id,
       });
@@ -50,12 +54,42 @@ app.post("/data", (req, res) => {
       console.log(error);
     });
 });
+
+app.post("/check", (req, res) => {
+  const { id } = req.body;
+  axios({
+    method: "get",
+    url: "https://api.dataforseo.com/v3/on_page/tasks_ready",
+    auth: {
+      username: `${process.env.LOGIN}`,
+      password: `${process.env.PASSWORD}`,
+    },
+    headers: {
+      "content-type": "application/json",
+    },
+  })
+    .then(function(response) {
+      var result = response["data"]["tasks"][0]["result"];
+      console.log(result);
+      for (let i = 0; i < result.length; i++) {
+        if (id === result[i].id) {
+          pending = false;
+          return res.send(pending);
+        }
+      }
+      res.send(pending);
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+});
+
 app.post("/FinalData", (req, res) => {
   const { id } = req.body;
   const post_array2 = [];
   post_array2.push({
     id: `${id}`,
-    limit: 10,
+    limit: 1,
   });
   axios({
     method: "post",
