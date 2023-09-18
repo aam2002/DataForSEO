@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Scaning = () => {
-  return (
-<h1>Scaning</h1>
-  )
-}
+  return <h1>We need 2 min to scan your data</h1>;
+};
 
-export default Scaning
+export default Scaning;

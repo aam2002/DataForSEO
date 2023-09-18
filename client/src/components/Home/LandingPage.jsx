@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import DataContext from "../context/DataContext";
 
@@ -10,31 +10,49 @@ const LandingPage = () => {
 
   const [input, setInput] = useState("");
 
-  const [id, setId] = useState(null);
+  const [id, setId] = useState("");
 
   const { setData } = useContext(DataContext);
 
   const handleChange = (e) => {
     setInput(e.target.value);
-  }
+    console.log(input);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await fetch("http://localhost:3030/data", {
+      await fetch("https://dataforseoserver-production.up.railway.app/data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({ url: input}),
+        body: JSON.stringify({ url: input }),
       })
         .then((response) => response.json())
         .then((r_id) => {
           navigate("/scaning");
-          setId(r_id);
-          console.log(r_id);
-          GetData();
+          setId(`${r_id.result}`);
+          console.log(`${r_id.result}`);
+          const checking = setInterval(() => {
+            fetch("https://dataforseoserver-production.up.railway.app/check", {
+              method: "post",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ id: id }),
+            })
+              .then((response) => response.json())
+              .then((pending) => {
+                console.log(id)
+                if (pending === true) {
+                  GetData();
+                  clearInterval(checking);
+                }
+                navigate("/scaning");
+              });
+          }, 3000);
         });
     } catch (error) {
       console.log(error);
@@ -42,15 +60,17 @@ const LandingPage = () => {
   };
   const GetData = async () => {
     try {
-      await fetch("http://localhost:3030/FinalData", {
-        method: "POST",
+      await fetch(
+        "https://dataforseoserver-production.up.railway.app/FinalData",
+        {
+          method: "post",
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({ id: id }),
-      })
+          body: JSON.stringify({ id: id }),
+        }
+      )
         .then((response) => response.json())
         .then(async (result) => {
           await setData(result);
