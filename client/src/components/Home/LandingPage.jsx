@@ -1,25 +1,22 @@
-import React, { useState, useContext, useEffect  } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import DataContext from "../context/DataContext";
 import Main from "../Data/Main";
 import Buffer from "../Data/Buffer";
-// import DataContext from "../context/DataContext";
-// import TakePost from "../Api/ApiCall";
+
 
 const LandingPage = () => {
   const navigate = useNavigate();
-
+  const { setData } = useContext(DataContext);
   const [input, setInput] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [gotData, setGotData] = useState(false);
-
-  const { setData, data } = useContext(DataContext);
-
-
+  
   const handleChange = (e) => {
     setInput(e.target.value);
+    localStorage.removeItem("result");
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,13 +43,12 @@ const LandingPage = () => {
             })
               .then((response) => response.json())
               .then((pending) => {
-                console.log(r_id.result);
                 if (pending === false) {
                   GetData(r_id.result);
                   clearInterval(checking);
                 }
               });
-          }, 45000);
+          }, 30000);
         });
     } catch (error) {
       console.log(error);
@@ -74,14 +70,16 @@ const LandingPage = () => {
         )
           .then((response) => response.json())
           .then((result) => {
-            console.log("getting");
             if (result[0].status_message === "Ok.") {
-               setData(result);
-              console.log(data);
+              setData(result);
               setGotData(true);
               clearInterval(getingdata);
             }
             if (result[0].status_code === 50402) {
+              navigate("/timeout");
+              clearInterval(getingdata);
+            }
+            if (result[0].status_code === 40201) {
               navigate("/timeout");
               clearInterval(getingdata);
             }
@@ -92,34 +90,40 @@ const LandingPage = () => {
     }
   };
   return (
-    <div>
+    <>
       {isLoading ? (
         gotData ? (
           <Main />
         ) : (
           <Buffer />
+   
         )
       ) : (
         <>
-          <div className="input-group input-group-lg">
-            <input
-              type="text"
-              className="form-control "
-              placeholder="https://enter_url.com"
-              value={input}
-              onChange={handleChange}
-            />
+          <div className="full-height">
+
+          <div>
+            <div className="input-group input-group-lg">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="https://enter_url.com"
+                value={input}
+                onChange={handleChange}
+              />
+            </div>
+            <button
+              type="button"
+              className="btn btn-success input-group-lg input-group mt-4"
+              onClick={handleSubmit}
+            >
+              Get Data
+            </button>{" "}
           </div>
-          <button
-            type="button"
-            className="btn btn-success input-group-lg input-group mt-4"
-            onClick={handleSubmit}
-          >
-            Get Data
-          </button>{" "}
+          </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

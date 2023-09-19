@@ -2,10 +2,12 @@ import React from "react";
 
 const Buffer = () => {
   return (
-    <div>
-      <div class="d-flex justify-content-center">
-        <div class="spinner-border" role="status">
-          <span class="visually-hidden">Loading...</span>
+    <div className="full-height">
+      <div>
+        <div className="d-flex justify-content-center text-light">
+          <div className="spinner-border btn-light" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       </div>
     </div>

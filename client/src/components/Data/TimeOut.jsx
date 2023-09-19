@@ -1,16 +1,26 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 const TimeOut = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
-    <div>
-        <h1>Error Occured</h1>
-        <p>Took to much Time to get the data </p>
-        <button onClick={navigate("/")}>
-            Go Back
-        </button>
-    </div>
-  )
-}
+    <>
+      <div className="full-height">
+        <div>
+          <div className="flex flex-center">
+            <h1 className="flex flex-column text-danger">
+              Error Occured
+              <p className="fs-5 text-white">
+                Took to much Time to get the data{" "}
+              </p>
+              <button className="btn btn-light" onClick={() => navigate("/")}>
+                Go Back
+              </button>
+            </h1>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
 
-export default TimeOut
+export default TimeOut;

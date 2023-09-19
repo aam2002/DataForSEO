@@ -22,9 +22,9 @@ const OnPageScore = ({ score }) => {
         valueContainer.textContent = `${progressEndValue}%`;
       }
     }, speed);
-  }, []);
+  });
   return (
-    <div className="container flex center">
+    <div className="container flex center mt-5 ">
       <div className="circular-progress">
         <div className="value-container">0%</div>
       </div>
